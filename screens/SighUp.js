@@ -40,12 +40,17 @@ export default function SighUp() {
     
   }
   function handelSignUp() {
-    createUserWithEmailAndPassword(auth, email, password).then(() => {
-      Alert.alert("Account Created Successfully");
-    });
-    console.log("pressed");
-    setEmail("");
-    setPassword("");
+    if (password == cnfrmPassword) {
+      createUserWithEmailAndPassword(auth, email, password).then(() => {
+        Alert.alert("Account Created Successfully");
+      });
+      console.log("pressed");
+      setEmail("");
+      setPassword("");
+    } else{
+      alert("Your password does not match!");
+    }
+    
   }
   return (
     <View
