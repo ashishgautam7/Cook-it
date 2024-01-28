@@ -6,8 +6,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { auth } from "../components/firebase";
+import { authr } from "../components/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Auth } from "firebase/auth";
 
 export default function SighUp() {
   const [email, setEmail] = useState("");
@@ -31,7 +32,6 @@ export default function SighUp() {
   }
   function handelBTLogin() {
     naviagtion.navigate("Login");
-    console.log("pressed");
   }
   function handelShowPassword() {
     
@@ -40,16 +40,23 @@ export default function SighUp() {
     
   }
   function handelSignUp() {
-    if (password == cnfrmPassword) {
-      createUserWithEmailAndPassword(auth, email, password).then(() => {
-        Alert.alert("Account Created Successfully");
-      });
-      console.log("pressed");
-      setEmail("");
-      setPassword("");
-    } else{
-      alert("Your password does not match!");
+    try {
+      if (password == cnfrmPassword) {
+        createUserWithEmailAndPassword(authr, email, password).then(() => {
+          Alert.alert("Account Created Successfully");
+        });
+        
+        setEmail("");
+        setPassword("");
+        setCnfrmPassword("");
+      } else{
+        alert("Your password does not match!");
+      }
+      
+    } catch (error) {
+      alert(error)
     }
+  
     
   }
   return (

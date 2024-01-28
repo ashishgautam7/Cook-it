@@ -2,10 +2,16 @@ import { View, Text, Image, Animated, Easing, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { onAuthStateChanged } from "firebase/auth";
+import { authr } from "../components/firebase";
+import { async } from "@firebase/util";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-export default function Welcome() {
+var loginValue = false
+ function Welcome() {
   const [paddingAnimation] = useState(new Animated.Value(30)); // Initial padding value
+  const[authuser, setAuthUser] = useState(null)
+
   const navigation = useNavigation();
   useEffect(() => {
     const loopRoundIN = Animated.timing(paddingAnimation, {
@@ -14,26 +20,49 @@ export default function Welcome() {
       useNativeDriver: false,
       easing: Easing.ease,
     });
-    // const loopRoundOut = Animated.timing(paddingAnimation, {
-    //   toValue: 30,
-    //   duration: 15,
-    //   useNativeDriver: false,
-    //   easing: Easing.ease,
-    // });
-
-    // const animationLoop = Animated.sequence([loopRoundIN, loopRoundOut]);
-    // Animated.loop(animationLoop).start();
     loopRoundIN.start()
     // timeOut to move to diffrent screen
     const navTimeOut = setTimeout(() => {
       loopRoundIN.stop();
       navigation.navigate("Login");
     }, 2000);
+    const listning =  onAuthStateChanged(authr,(user)=>{
+
+      if (user) {
+        setAuthUser(user)
+        setTimeout(()=>{
+          navigation.navigate("Home")
+        },2000)
+          
+      } else {
+        setAuthUser(null)
+        setTimeout(()=>{
+          navigation.navigate("Login")
+        },2000)
+      }
+    })
+
+
     return () => {
       loopRoundIN.stop()
       clearTimeout(navTimeOut);
     };
-  }, [navigation, paddingAnimation]);
+  }, [navigation, paddingAnimation, authuser]);
+
+  // const saveState = async()=>{
+  //   try {
+  //     await AsyncStorage.setItem("state",loginValue)
+  //   } catch (error) {
+  //     console.log("state not saved " + error );
+  //   }
+  // }
+  // const getState = async()=>{
+  //   try {
+  //     await AsyncStorage.getItem("state")
+  //   } catch (error) {
+  //     console.log("state not retreved " + error );
+  //   }
+  // }
 
   return (
     <View
@@ -78,3 +107,4 @@ export default function Welcome() {
     </View>
   );
 }
+export {Welcome,loginValue}

@@ -1,17 +1,26 @@
 import { View, Text, TextInput, Button, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import auth from "@react-native-firebase/auth";
+import { authr } from "../components/firebase";
 import { useState } from "react";
-import {widthPercentageToDP as wp,heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
-
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { loginValue } from "./Welcome";
+// import { firebase } from "@react-native-firebase/auth";
 
 export default function Loginogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cnfrmPassword, setCnfrmPassword] = useState("");
-  const naviagtion = useNavigation()
+  const [showPas, setShowPass] = useState(true);
+  const naviagtion = useNavigation();
 
+  useEffect(() => {
+    // Clean up the listener when the component unmounts
+  }, []);
   // Handel email address
 
   function handelEmailChage(text) {
@@ -20,14 +29,28 @@ export default function Loginogin() {
   function handelPasswordChage(text) {
     setPassword(text);
   }
-  
-  function handellogin(text) {
-    console.log("pressed");
+
+  function handellogin() {
+    if (email != "" && password != "") {
+      signInWithEmailAndPassword(authr, email, password)
+        .then((userCredencial) => {
+          naviagtion.navigate("Home");
+          // console.log(userCredencial);
+        })
+        .catch((error) => {
+          alert("Error: " + error);
+        });
+    } else {
+      alert("Enter Email and  Password");
     }
-    function handelSignUp(text) {
-      naviagtion.navigate("Signup")
-      console.log("pressed");
-      }
+  }
+  function handelShowPasword() {
+    setShowPass(!showPas);
+  }
+
+  function handelSignUp(text) {
+    naviagtion.navigate("Signup");
+  }
   return (
     <View
       style={{
@@ -37,7 +60,7 @@ export default function Loginogin() {
         alignItems: "center",
       }}
     >
-      <Text style={{color:'#FFB534',padding:hp(2),fontSize:50}}>
+      <Text style={{ color: "#FFB534", padding: hp(2), fontSize: 50 }}>
         CookIT
       </Text>
       <View
@@ -60,18 +83,26 @@ export default function Loginogin() {
           onChangeText={handelEmailChage}
           value={email}
         />
-        <TextInput
-          style={{
-            margin: hp(1),
-            padding: hp(1),
-            width: wp(70),
-            backgroundColor: "#f7ede2",
-          }}
-          placeholder="Enter Password"
-          onChangeText={handelPasswordChage}
-          value={password}
-        />
-        
+        <View>
+          <TextInput
+            style={{
+              margin: hp(1),
+              padding: hp(1),
+              width: wp(70),
+              backgroundColor: "#f7ede2",
+            }}
+            placeholder="Enter Password"
+            onChangeText={handelPasswordChage}
+            value={password}
+            secureTextEntry={showPas}
+          />
+          <Pressable onPress={handelShowPasword}>
+            <Text style={{ fontSize: 10, paddingLeft: 10 }}>
+              {showPas ? "Show Password" : "Hide Password"}
+            </Text>
+          </Pressable>
+        </View>
+
         <Pressable
           style={{
             justifyContent: "center",
@@ -84,7 +115,7 @@ export default function Loginogin() {
             borderRadius: hp(2),
             width: hp(15),
           }}
-          onPress = {handellogin}
+          onPress={handellogin}
         >
           <Text style={{ color: "white", fontSize: 16 }}>Login</Text>
         </Pressable>
@@ -100,7 +131,7 @@ export default function Loginogin() {
             borderRadius: hp(2),
             width: hp(15),
           }}
-          onPress = {handelSignUp}
+          onPress={handelSignUp}
         >
           <Text style={{ color: "white", fontSize: 16 }}>Sign up</Text>
         </Pressable>
