@@ -10,10 +10,17 @@ import {
 import ScreenHeader from "../components/header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Category from "../components/category";
+import axios from "axios";
 
 export default function Home() {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('Starter')
+  const [categories, setCategories] = useState([]);
+
+useEffect (()=>{
+getCategories()
+},[])
   const signout = () => {
     signOut(authr).then(() => {
       setUser(false);
@@ -25,6 +32,19 @@ export default function Home() {
     console.log("Pressed search");
   };
 
+
+const getCategories = async ()=>{
+  try {
+    const responce = await axios.get('http://themealdb.com/api/json/v1/1/categories.php')
+    // console.log("here   ",responce.data);
+    if(responce&&responce.data){
+      setCategories(responce.data.categories)
+      // console.log('hehe  ',categories);
+    }
+  } catch (error) {
+    console.log("Error while featching categories",  error);
+  }
+}
   return (
     <View
       style={{ backgroundColor: "#FBF6EE", height: hp(100), padding: hp(2) }}
@@ -35,6 +55,7 @@ export default function Home() {
       <View
         style={{
           marginTop: hp(4),
+          marginBottom:hp(5),
           flexDirection: "row",
           alignItems: "center",
           backgroundColor: "#FFFFFF",
@@ -49,7 +70,7 @@ export default function Home() {
           <MaterialCommunityIcons name="magnify" size={24} color="black" />
         </Pressable>
       </View>
-      <Category/>
+      <Category categories={categories} activeCategory = {activeCategory} setActiveCategory={setActiveCategory}/>
 
     </View>
   );

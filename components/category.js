@@ -5,7 +5,8 @@ import {
   TextInput,
   Pressable,
   ScrollView,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -13,9 +14,13 @@ import {
 } from "react-native-responsive-screen";
 import { categoryData } from "./mockData";
 
-export default function Category() {
+export default function Category({categories, activeCategory,setActiveCategory}) {
+    // function handelCategory() {
+    //     setActiveCategory(categories.strCategory)
+    //     console.log(activeCategory);
+    // }
   return (
-    <View style={{ margin: hp(2) }}>
+    <View style={{  }}>
       <Text style={{ fontSize: 20, color: "#EC8F5E" }}>Category</Text>
       <ScrollView
         horizontal
@@ -23,17 +28,27 @@ export default function Category() {
         contentContainerStyle={{paddingHorizontal:15}}
       >
         {
-            categoryData.map((category, index)=>{
+            categories.map((category, index)=>{
+                
+                    
+                
+                let  isActive = activeCategory ==activeCategory;
+                let  backgroundColor=isActive ? 'white' : '#EC8F5E';
+            
                 return(
-                    <Pressable key={index} style={{display:'flex', alignItems:'center'}}>
-                        <View style={{borderRadius:hp(20),borderRadius:hp(200),padding:hp(1)}}>
+                    category.strCategory!=='Beef' &&(
+                    <TouchableOpacity key={index} style={{display:'flex', alignItems:'center'}}
+                    onPress={()=>{setActiveCategory(category.strCategory)}}>
+                        <View style={{borderRadius:hp(20),borderRadius:hp(200),padding:hp(1),margin:
+                            hp(1),backgroundColor:{backgroundColor:{backgroundColor}}}}>
                             <Image
-                                source={{uri: category.image}}
+                                source={{uri: category.strCategoryThumb}}
                                 style={{width:hp(7),height:hp(7),borderRadius:hp(20)}}
                             />                            
                         </View>
-                        <Text>{category.name}</Text>
-                    </Pressable>
+                        <Text>{category.strCategory}</Text>
+                    </TouchableOpacity>
+                    )
                 )
             })
         }
