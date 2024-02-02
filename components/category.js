@@ -13,6 +13,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { categoryData } from "./mockData";
+import { color,fontSize } from "./colors";
 
 export default function Category({categories, activeCategory,setActiveCategory}) {
     // function handelCategory() {
@@ -21,7 +22,7 @@ export default function Category({categories, activeCategory,setActiveCategory})
     // }
   return (
     <View style={{  }}>
-      <Text style={{ fontSize: 20, color: "#EC8F5E" }}>Category</Text>
+      <Text style={{ fontSize: 20, color: color.HedingColor }}>Category</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

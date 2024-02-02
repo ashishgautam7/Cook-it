@@ -11,6 +11,8 @@ import ScreenHeader from "../components/header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Category from "../components/category";
 import axios from "axios";
+import { color,fontSize } from "../components/colors";
+import Recepi from "../components/Recepi";
 
 export default function Home() {
   const navigation = useNavigation();
@@ -47,7 +49,7 @@ const getCategories = async ()=>{
 }
   return (
     <View
-      style={{ backgroundColor: "#FBF6EE", height: hp(100), padding: hp(2) }}
+      style={{ backgroundColor: color.backgroundColor, height: hp(100), padding: hp(2) }}
     >
       {/*Header */}
      <ScreenHeader/>
@@ -71,6 +73,8 @@ const getCategories = async ()=>{
         </Pressable>
       </View>
       <Category categories={categories} activeCategory = {activeCategory} setActiveCategory={setActiveCategory}/>
+      <Recepi></Recepi>
+
 
     </View>
   );
