@@ -15,11 +15,15 @@ import {
 import { categoryData } from "./mockData";
 import { color,fontSize } from "./colors";
 
-export default function Category({categories, activeCategory,setActiveCategory}) {
+export default function Category({categories, activeCategory,handelCategoryChange}) {
     // function handelCategory() {
     //     setActiveCategory(categories.strCategory)
     //     console.log(activeCategory);
     // }
+    // function type() {
+    //   console.log("cat: ", typeof categories);
+    // }
+    // type()
   return (
     <View style={{  }}>
       <Text style={{ fontSize: 20, color: color.HedingColor }}>Category</Text>
@@ -31,17 +35,17 @@ export default function Category({categories, activeCategory,setActiveCategory})
         {
             categories.map((category, index)=>{
                 
-                    
+                  
                 
                 let  isActive = activeCategory ==activeCategory;
-                let  backgroundColor=isActive ? 'white' : '#EC8F5E';
+                let  backgroundColor=isActive ? 'black' : '#EC8F5E';
             
                 return(
                     category.strCategory!=='Beef' &&(
                     <TouchableOpacity key={index} style={{display:'flex', alignItems:'center'}}
-                    onPress={()=>{setActiveCategory(category.strCategory)}}>
+                    onPress={()=>{handelCategoryChange(category.strCategory)}}>
                         <View style={{borderRadius:hp(20),borderRadius:hp(200),padding:hp(1),margin:
-                            hp(1),backgroundColor:{backgroundColor:{backgroundColor}}}}>
+                            hp(1),backgroundColor:{backgroundColor}, width:hp(8),height:hp(8)}}>
                             <Image
                                 source={{uri: category.strCategoryThumb}}
                                 style={{width:hp(7),height:hp(7),borderRadius:hp(20)}}

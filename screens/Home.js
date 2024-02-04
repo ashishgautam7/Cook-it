@@ -19,10 +19,19 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [activeCategory, setActiveCategory] = useState('Starter')
   const [categories, setCategories] = useState([]);
+  const [meals, setMeals] = useState([]);
 
 useEffect (()=>{
 getCategories()
+getRecipiesByCategories()
 },[])
+
+const handelCategoryChange = category=> {
+  getRecipiesByCategories(category)
+  setActiveCategory(category)
+  setMeals([])
+}
+
   const signout = () => {
     signOut(authr).then(() => {
       setUser(false);
@@ -45,6 +54,19 @@ const getCategories = async ()=>{
     }
   } catch (error) {
     console.log("Error while featching categories",  error);
+  }
+}
+const getRecipiesByCategories = async (category="Dessert")=>{
+  try {
+    const responce = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
+    // console.log("Recepie   ",responce.data.meals);
+    if (responce&&responce.data) {
+      setMeals(responce.data.meals)
+      // console.log("Recepie", recipes );
+    }
+   
+  } catch (error) {
+    console.log("Error while featching Recepies",  error);
   }
 }
   return (
@@ -72,8 +94,8 @@ const getCategories = async ()=>{
           <MaterialCommunityIcons name="magnify" size={24} color="black" />
         </Pressable>
       </View>
-      <Category categories={categories} activeCategory = {activeCategory} setActiveCategory={setActiveCategory}/>
-      <Recepi></Recepi>
+      <Category categories={categories} activeCategory = {activeCategory} handelCategoryChange={handelCategoryChange}/>
+      <Recepi recipes={meals} categories={categories}></Recepi>
 
 
     </View>
