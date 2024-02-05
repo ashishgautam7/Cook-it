@@ -6,9 +6,11 @@ import {
   } from "react-native-responsive-screen";
   import { Entypo } from "@expo/vector-icons";
   import { FontAwesome6 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
   
 
 export default function ScreenHeader() {
+  const navigation = useNavigation();
   return (
     <View
     style={{
@@ -19,7 +21,8 @@ export default function ScreenHeader() {
     }}
   > 
     
-    <Pressable onPress={() => console.log("pressed user")}>
+    <Pressable onPress={()=>{
+      navigation.navigate('Profile')}}>
     <Entypo name="user" size={24} color="gray" />
     </Pressable>
     

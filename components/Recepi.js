@@ -5,21 +5,18 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import Loader from "./loader";
 import categoryData from "./mockData";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Recepi({recipes, categories}) {
   
 
   return (
-    <View style={{ marginTop: hp(5) }}>
-      <Text
-        style={{ color: color.HedingColor, fontSize: fontSize.headingSize }}
-      >
-        Recepie
-      </Text>
+    <View style={{ marginTop: hp(1) }}>
       <ScrollView style={{ height: hp(50) }}>
         {recipes.length == 0 || categories.length == 0
-          ? <Text>not</Text>
+          ? <Loader/>
           : recipes.map((item, index) => (
               <CardItem key={index} data={item}></CardItem>
             ))}
@@ -32,6 +29,7 @@ const CardItem = ({ data }) => {
   function handelRecepiePress() {
     console.log("Recepie Pressed");
   }
+  const navigation = useNavigation();
   return (
     <View>
       <Pressable
@@ -44,7 +42,9 @@ const CardItem = ({ data }) => {
           borderRadius: hp(4),
           overflow: "hidden",
         }}
-        onPress={handelRecepiePress}
+        onPress={()=>{
+        navigation.navigate("RecepieDetail",{data:data})
+        }}
       >
         <Image
           style={{ height: 100, width: 100, borderRadius: hp(100) }}

@@ -10,7 +10,7 @@ const color = {
 
 const fontSize = {
     headingSize: 20,
-    textSize: 4
+    textSize: hp(2)
 
 }
 

@@ -2,6 +2,8 @@ import { View, Text, Button, TextInput, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { authr } from "../components/firebase";
 import { signOut } from "firebase/auth";
+// import { signOut } from "../components/firebase";
+
 import { useNavigation } from "@react-navigation/native";
 import {
   widthPercentageToDP as wp,
@@ -17,7 +19,7 @@ import Recepi from "../components/Recepi";
 export default function Home() {
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('Starter')
+  const [activeCategory, setActiveCategory] = useState('Chicken')
   const [categories, setCategories] = useState([]);
   const [meals, setMeals] = useState([]);
 
@@ -56,7 +58,7 @@ const getCategories = async ()=>{
     console.log("Error while featching categories",  error);
   }
 }
-const getRecipiesByCategories = async (category="Dessert")=>{
+const getRecipiesByCategories = async (category="Chicken")=>{
   try {
     const responce = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
     // console.log("Recepie   ",responce.data.meals);
@@ -95,6 +97,12 @@ const getRecipiesByCategories = async (category="Dessert")=>{
         </Pressable>
       </View>
       <Category categories={categories} activeCategory = {activeCategory} handelCategoryChange={handelCategoryChange}/>
+      <Text
+        style={{ color: color.HedingColor, fontSize: fontSize.headingSize, marginTop:hp(5) }}
+      >
+        Recepie
+      </Text>
+      <Text style={{margin:hp(2),color:'#F7B787'}}>{activeCategory}</Text>
       <Recepi recipes={meals} categories={categories}></Recepi>
 
 

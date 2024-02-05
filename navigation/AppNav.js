@@ -5,6 +5,9 @@ import React from 'react'
 import {Welcome} from '../screens/Welcome';
 import Login from '../screens/Login';
 import SighUp from '../screens/SighUp';
+import RecepieDetail from '../screens/RecepieDetail';
+import Profile from '../screens/profile';
+import Search from '../screens/Search';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +19,9 @@ export default function AppNav() {
         <Stack.Screen name='Welcome' component={Welcome}/>
         <Stack.Screen name='Login' component={Login}/>
         <Stack.Screen name='Signup' component={SighUp}/>
+        <Stack.Screen name='RecepieDetail' component={RecepieDetail}/>
+        <Stack.Screen name='Profile' component={Profile}/>
+        <Stack.Screen name='Search' component={Search}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
