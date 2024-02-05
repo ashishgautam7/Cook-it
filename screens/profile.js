@@ -1,10 +1,15 @@
-import { View, Text } from 'react-native'
+import { View, Text,Image } from 'react-native'
 import React from 'react'
+import { Entypo } from '@expo/vector-icons';
+
 
 export default function Profile() {
   return (
     <View>
-      <Text>profile</Text>
+      {/* Profile  Picture */}
+      <View>
+        
+      </View>
     </View>
   )
 }
