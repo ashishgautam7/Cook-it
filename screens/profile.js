@@ -8,7 +8,7 @@ import { color } from "../components/colors";
 import { Entypo } from "@expo/vector-icons";
 import ImagePicker from "react-native-image-picker";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { authr } from "../components/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -32,9 +32,14 @@ export default function Profile() {
     if (user) {
       setEmail(user.email);
     } else {
-      alert("Not Loged in");
+      setEmail("Guest")
     }
   });
+  const signout = ()=>{
+    signOut(authr).then(()=>{
+      navigation.navigate('Login')
+    })
+  }
 
   return (
     <View style={{ backgroundColor: color.backgroundColor, height: hp(100) }}>
@@ -90,6 +95,9 @@ export default function Profile() {
       >
         <Text>{email}</Text>
       </View>
+      <TouchableOpacity onPress={ signout }>
+        <Text>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
