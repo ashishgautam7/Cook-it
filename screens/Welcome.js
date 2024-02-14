@@ -16,7 +16,7 @@ var loginValue = false
   useEffect(() => {
     const loopRoundIN = Animated.timing(paddingAnimation, {
       toValue: 50,
-      duration: 500,
+      duration: 400,
       useNativeDriver: false,
       easing: Easing.ease,
     });
@@ -38,7 +38,7 @@ var loginValue = false
         setAuthUser(null)
         setTimeout(()=>{
           navigation.navigate("Login")
-        },2000)
+        },1000)
       }
     })
 

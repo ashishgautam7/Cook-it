@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,45 +8,74 @@ import { color } from "../components/colors";
 import { Entypo } from "@expo/vector-icons";
 import ImagePicker from "react-native-image-picker";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, sendPasswordResetEmail, signOut } from "firebase/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authr } from "../components/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { async } from "@firebase/util";
 
 export default function Profile() {
-  // const [selectImage, setSelectImage] = useState('../assets/user.png');
-  // cosnt[userEmail, setUserEmail] = useState(null)
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState("Guest");
+  const [notification,setNotification] = useState(false)
   const navigation = useNavigation();
-  // const pickImage = () => {
-  //   let options = {
-  //     storageOptions:{
-  //       path:'image'
-  //     }
-  //   }
-  //   launchImageLibrary(options,responce=>{
-  //     console.log(responce);
-  //   })
-  // };
+useEffect(()=>{
+  getData()
+},[])
+useEffect(()=>{
+  saveData()
+},[notification])
   const unSubcribe = onAuthStateChanged(authr, (user) => {
     if (user) {
       setEmail(user.email);
     } else {
-      setEmail("Guest")
+      setEmail("Guest");
     }
   });
-  const signout = ()=>{
-    signOut(authr).then(()=>{
-      navigation.navigate('Login')
+  const signout = () => {
+    signOut(authr).then(() => {
+      navigation.navigate("Login");
+    });
+  };
+  function handelNotification() {
+    setNotification(!notification)
+   
+  }
+  function handelPasswordChange() {
+    sendPasswordResetEmail(authr,email).then(()=>{
+      console.log("PW changed");
     })
+    
+  }
+  
+  const saveData=async ()=>{
+    try {
+      await AsyncStorage.setItem('notification', JSON.stringify(notification))
+    } catch (error) {
+      console.log("value not saved: ",error);
+    }
+  }
+  const getData=async ()=>{
+    try {
+      const noti =  await AsyncStorage.getItem('notification')
+      if (noti!=null) {
+        setNotification(JSON.parse(noti))
+      }
+    } catch (error) {
+      console.log("value not recived");
+    }
   }
 
   return (
     <View style={{ backgroundColor: color.backgroundColor, height: hp(100) }}>
       {/* Profile  Picture */}
-      <TouchableOpacity style={{marginTop:hp(1)}} onPress={()=>{
-        navigation.navigate('Home')
-      }}>
+      <TouchableOpacity
+        style={{ marginTop: hp(1) }}
+        onPress={() => {
+          navigation.navigate("Home");
+        }}
+      >
         <Ionicons
           name="arrow-back-outline"
           size={24}
@@ -54,13 +83,17 @@ export default function Profile() {
           style={{ margin: hp(1), marginTop: hp(2) }}
         />
       </TouchableOpacity>
-
+      <View style={{justifyContent:'center',alignItems:'center'}}>
+        <Text style={{ color: "#FFB534", padding: hp(2), fontSize: 50 }}>
+          CookIT
+        </Text>
+      </View>
       <View
         style={{
           justifyContent: "center",
           alignContent: "center",
           alignItems: "center",
-          marginTop: hp(15),
+          marginTop: hp(1),
           backgroundColor: color.backgroundColor,
           flexDirection: "row",
         }}
@@ -80,7 +113,7 @@ export default function Profile() {
         <TouchableOpacity
           style={{ marginTop: hp(20), right: hp(5) }}
           onPress={() => {
-            console.log(presswd);
+            console.log("presswd");
           }}
         >
           <Entypo name="camera" size={24} color="#EC8F5E" />
@@ -95,9 +128,60 @@ export default function Profile() {
       >
         <Text>{email}</Text>
       </View>
-      <TouchableOpacity onPress={ signout }>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+
+      {/*****************Rest profile elements********************/}
+
+      <View
+        style={{
+          backgroundColor: "white",
+          borderRadius: hp(2),
+          justifyContent: "space-around",
+          // marginTop: hp(5),
+          top:hp(10),
+          paddingBottom:hp(5),
+          // paddingTop:hp(5)
+        }}
+      >
+        <TouchableOpacity
+          onPress={handelPasswordChange}
+          style={{ padding: hp(2), flexDirection: "row" }}
+        >
+          <MaterialIcons name="password" size={24} color="black" />
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Change Password</Text>
+         
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={()=>{handelNotification()}}
+          style={{ padding: hp(2), flexDirection: "row" }}
+        >
+          {
+            notification?<Ionicons name="notifications" size={24} color="black" /> :
+            <Ionicons name="notifications-off" size={24} color="black" />
+          }
+                   
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Notification</Text>         
+          
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={()=>{navigation.navigate('Favorite')}}
+          style={{ padding: hp(2), flexDirection: "row" }}
+        >
+          <MaterialIcons name="favorite" size={24} color="black" />
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Favorites</Text>
+          
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={signout}
+          style={{ padding: hp(2), flexDirection: "row" }}
+        >
+          <MaterialIcons name="logout" size={24} color="black" />
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Logout</Text>
+          
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

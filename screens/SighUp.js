@@ -41,17 +41,22 @@ export default function SighUp() {
   }
   function handelSignUp() {
     try {
-      if (password == cnfrmPassword) {
-        createUserWithEmailAndPassword(authr, email, password).then(() => {
-          Alert.alert("Account Created Successfully");
-        });
-        
-        setEmail("");
-        setPassword("");
-        setCnfrmPassword("");
-      } else{
-        alert("Your password does not match!");
+      if(email==""||password==""||cnfrmPassword==""){
+        Alert.alert("Fields can not be empty");
+      }else{
+        if (password == cnfrmPassword) {
+          createUserWithEmailAndPassword(authr, email, password).then(() => {
+            Alert.alert("Account Created Successfully");
+          });
+          
+          setEmail("");
+          setPassword("");
+          setCnfrmPassword("");
+        } else{
+          alert("Your password does not match!");
+        }
       }
+      
       
     } catch (error) {
       alert(error)

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, Pressable } from "react-native";
+import { View, Text, TextInput, Button, Pressable,ImageBackground, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect } from "react";
 import auth from "@react-native-firebase/auth";
 import { authr } from "../components/firebase";
@@ -8,8 +8,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { loginValue } from "./Welcome";
+import { color } from "../components/colors";
 // import { firebase } from "@react-native-firebase/auth";
 
 export default function Loginogin() {
@@ -38,7 +39,9 @@ export default function Loginogin() {
           // console.log(userCredencial);
         })
         .catch((error) => {
-          alert("Error: " + error);
+          alert("Error: " + "Invalid Email or Password");
+          setEmail("")
+          setPassword("")
         });
     } else {
       alert("Enter Email and  Password");
@@ -51,13 +54,27 @@ export default function Loginogin() {
   function handelSignUp(text) {
     naviagtion.navigate("Signup");
   }
+  function handelForgotPassword() {
+   naviagtion.navigate('ForgotPassword')
+    // 
+  }
   return (
-    <View
+    <ImageBackground style={{
+      backgroundColor: "#FBF6EE",
+      flex: 1,
+      justifyContent: "center",
+      resizeMode: 'cover',
+      alignItems: "center",
+    }}
+    // source={require('../assets/login.jpg')}
+    >
+      <View
       style={{
-        backgroundColor: "#FBF6EE",
+        // backgroundColor: "#FBF6EE",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        
       }}
     >
       <Text style={{ color: "#FFB534", padding: hp(2), fontSize: 50 }}>
@@ -65,7 +82,7 @@ export default function Loginogin() {
       </Text>
       <View
         style={{
-          backgroundColor: "white",
+          backgroundColor: "rgba(0,0,0,0.2)",
           padding: hp(1),
           borderRadius: 10,
           height: hp(50),
@@ -135,7 +152,15 @@ export default function Loginogin() {
         >
           <Text style={{ color: "white", fontSize: 16 }}>Sign up</Text>
         </Pressable>
+        <View style={{backgroundColor:'gray',width:hp(25),height:hp(0.1), marginTop:hp(1),marginLeft:'auto',marginRight:'auto'}}></View>
+        <View>
+          <TouchableOpacity style={{justifyContent:'center', alignItems:'center',padding:hp(1)}} onPress={handelForgotPassword}>
+            <Text style={{color:color.HedingColor}}>Forgot Password</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
+    </ImageBackground>
+    
   );
 }
