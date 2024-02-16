@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { async } from "@firebase/util";
+import Toast from 'react-native-simple-toast';
 
 export default function Profile() {
   const [email, setEmail] = useState("Guest");
@@ -42,6 +43,11 @@ export default function Profile() {
       signOut(authr).then(() => {
         navigation.navigate("Login");
       });
+      Toast.showWithGravity(
+        'Logged out',
+        Toast.SHORT,
+        Toast.BOTTOM,
+      );
     } else
       Alert.alert("Not Logged in", "You are not log in", [
         {
@@ -56,6 +62,11 @@ export default function Profile() {
   function handelNotification() {
     if (email!="Guest") {
       setNotification(!notification);
+      Toast.showWithGravity(
+        notification ? "Notification Truned off" : "Notification Turned On ",
+        Toast.SHORT,
+        Toast.BOTTOM
+      )
     }else{
       Alert.alert("Not Logged in", "You are not log in", [
         {
