@@ -30,9 +30,9 @@ getCategories()
 getRecipiesByCategories()
 },[searchMeal])
 
-useEffect (()=>{
-  setSearch("");
-  },[searchMeal])
+// useEffect (()=>{
+//   setSearch("");
+//   },[searchMeal])
 
 const handelCategoryChange = category=> {
   getRecipiesByCategories(category)
@@ -57,8 +57,9 @@ function handelSearchTextChange(text) {
       if(responce&&responce.data){
         // console.log('Log 1: ',responce.data.meals);
         setSearchMeal(responce.data.meals[0])
-        // console.log("hehe: ",searchMeal);
+        console.log("hehe: ",searchMeal);
         navigation.navigate("NotificationScreen")
+        setSearch("")
         
       }else{
         console.log("no data");
@@ -116,6 +117,7 @@ const getRecipiesByCategories = async (category="Chicken")=>{
           placeholder="Search for Recipe"
           style={{ flex: 1, padding: 10, paddingHorizontal: 10, height: hp(5)}}
           onChangeText={handelSearchTextChange}
+          value={search}
         ></TextInput>
         <Pressable onPress={handelSearch} style={{padding:10}}>
           <MaterialCommunityIcons name="magnify" size={24} color="black" />
