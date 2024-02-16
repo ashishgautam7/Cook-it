@@ -13,8 +13,8 @@ export default function Recepi({recipes, categories}) {
   
 
   return (
-    <View style={{ marginTop: hp(1) }}>
-      <ScrollView style={{ height: hp(50) }}>
+    <View style={{ marginTop: hp(0.1) }}>
+      <ScrollView style={{ height: hp(60) }}>
         {recipes.length == 0 || categories.length == 0
           ? <Loader/>
           : recipes.map((item, index) => (

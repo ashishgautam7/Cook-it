@@ -92,7 +92,7 @@ const getRecipiesByCategories = async (category="Chicken")=>{
 }
   return (
     <View
-      style={{ backgroundColor: color.backgroundColor, height: hp(100), padding: hp(2) }}
+      style={{ backgroundColor: color.backgroundColor, height: hp(1000), padding: hp(2) }}
     >
       {/*Header */}
      <ScreenHeader/>
@@ -119,7 +119,7 @@ const getRecipiesByCategories = async (category="Chicken")=>{
       </View>
       <Category categories={categories} activeCategory = {activeCategory} handelCategoryChange={handelCategoryChange}/>
       <Text
-        style={{ color: color.HedingColor, fontSize: fontSize.headingSize, marginTop:hp(5) }}
+        style={{ color: color.HedingColor, fontSize: fontSize.headingSize, marginTop:hp(1) }}
       >
         Recepie
       </Text>
