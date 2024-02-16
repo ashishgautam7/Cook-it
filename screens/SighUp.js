@@ -15,6 +15,7 @@ export default function SighUp() {
   const [password, setPassword] = useState("");
   const [cnfrmPassword, setCnfrmPassword] = useState("");
   const [showPas, setShowPass] = useState(true);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   // const [showPasText, setShowPassText] = useState("show password");
   const naviagtion = useNavigation();
 
@@ -44,17 +45,32 @@ export default function SighUp() {
       if(email==""||password==""||cnfrmPassword==""){
         Alert.alert("Fields can not be empty");
       }else{
-        if (password == cnfrmPassword) {
-          createUserWithEmailAndPassword(authr, email, password).then(() => {
-            Alert.alert("Account Created Successfully");
-          });
-          
-          setEmail("");
-          setPassword("");
-          setCnfrmPassword("");
-        } else{
-          alert("Your password does not match!");
+        if(emailRegex.test(email)){
+          if (password == cnfrmPassword) {
+            createUserWithEmailAndPassword(authr, email, password).then(() => {
+              Alert.alert("Account Created Successfully");
+            });
+            
+            setEmail("");
+            setPassword("");
+            setCnfrmPassword("");
+          } else{
+            alert("Your password does not match!");
+          }
+        }else{
+          Alert.alert(
+            "Invalid Email",
+            "Please enter correct email  format.",
+            [{
+              text:'Okay', onPress:()=>{
+                setEmail("")
+                setCnfrmPassword("")
+                setPassword("")
+              }
+            }]
+          )
         }
+        
       }
       
       

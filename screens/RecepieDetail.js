@@ -72,7 +72,7 @@ export default function RecepieDetail({ route }) {
 
   //   console.log(item);
   return (
-    <ScrollView style={{ backgroundColor: color.backgroundColor }}>
+    <ScrollView style={{ backgroundColor: color.backgroundColor,marginTop:hp(5) }}>
       {/*Image */}
       
     {

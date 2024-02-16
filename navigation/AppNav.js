@@ -9,7 +9,9 @@ import RecepieDetail from '../screens/RecepieDetail';
 import Profile from '../screens/profile';
 import Search from '../screens/Search';
 import Favorite from '../screens/Favorite';
+import NotificationScreen from '../screens/Notification';
 import ForgotPassword from '../screens/ForgotPassword';
+
 
 const Stack = createStackNavigator();
 
@@ -26,6 +28,7 @@ export default function AppNav() {
         <Stack.Screen name='Search' component={Search}/>
         <Stack.Screen name='Favorite' component={Favorite}/>
         <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
+        <Stack.Screen name='NotificationScreen' component={NotificationScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

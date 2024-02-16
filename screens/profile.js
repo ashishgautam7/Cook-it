@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   widthPercentageToDP as wp,
@@ -8,8 +8,12 @@ import { color } from "../components/colors";
 import { Entypo } from "@expo/vector-icons";
 import ImagePicker from "react-native-image-picker";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import { onAuthStateChanged, sendPasswordResetEmail, signOut } from "firebase/auth";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signOut,
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authr } from "../components/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -18,14 +22,14 @@ import { async } from "@firebase/util";
 
 export default function Profile() {
   const [email, setEmail] = useState("Guest");
-  const [notification,setNotification] = useState(false)
+  const [notification, setNotification] = useState(false);
   const navigation = useNavigation();
-useEffect(()=>{
-  getData()
-},[])
-useEffect(()=>{
-  saveData()
-},[notification])
+  useEffect(() => {
+    getData();
+  }, []);
+  useEffect(() => {
+    saveData();
+  }, [notification]);
   const unSubcribe = onAuthStateChanged(authr, (user) => {
     if (user) {
       setEmail(user.email);
@@ -34,44 +38,103 @@ useEffect(()=>{
     }
   });
   const signout = () => {
-    signOut(authr).then(() => {
-      navigation.navigate("Login");
-    });
+    if (email != "Guest") {
+      signOut(authr).then(() => {
+        navigation.navigate("Login");
+      });
+    } else
+      Alert.alert("Not Logged in", "You are not log in", [
+        {
+          text: "Login",
+          onPress: () => navigation.navigate("Login"),
+        },
+        {
+          text: "Cancle",
+        },
+      ]);
   };
   function handelNotification() {
-    setNotification(!notification)
-   
-  }
-  function handelPasswordChange() {
-    sendPasswordResetEmail(authr,email).then(()=>{
-      console.log("PW changed");
-    })
+    if (email!="Guest") {
+      setNotification(!notification);
+    }else{
+      Alert.alert("Not Logged in", "You are not log in", [
+        {
+          text: "Login",
+          onPress: () => navigation.navigate("Login"),
+        },
+        {
+          text: "Cancle",
+        },
+      ]);
+    }
     
   }
-  
-  const saveData=async ()=>{
+  function handelPasswordChange() {
     try {
-      await AsyncStorage.setItem('notification', JSON.stringify(notification))
+      if(email != 'Guest'){
+        sendPasswordResetEmail(authr, email).then(() => {
+          Alert.alert(
+            "Password Reset",
+            `Reset Password Link has been sent to your email address '${email}` +
+              "'"
+          );
+        });
+      }else{
+        Alert.alert("Not Logged in", "You are not log in", [
+          {
+            text: "Login",
+            onPress: () => navigation.navigate("Login"),
+          },
+          {
+            text: "Cancle",
+          },
+        ]);
+      }
+      
     } catch (error) {
-      console.log("value not saved: ",error);
+      alert(error);
     }
   }
-  const getData=async ()=>{
+  function handelFavorites(){
+    if (email!="Guest") {
+      navigation.navigate('Favorite')
+    }
+    else{
+      Alert.alert("Not Logged in", "You are not log in", [
+        {
+          text: "Login",
+          onPress: () => navigation.navigate("Login"),
+        },
+        {
+          text: "Cancle",
+        },
+      ]);
+    }
+  }
+
+  const saveData = async () => {
     try {
-      const noti =  await AsyncStorage.getItem('notification')
-      if (noti!=null) {
-        setNotification(JSON.parse(noti))
+      await AsyncStorage.setItem("notification", JSON.stringify(notification));
+    } catch (error) {
+      console.log("value not saved: ", error);
+    }
+  };
+  const getData = async () => {
+    try {
+      const noti = await AsyncStorage.getItem("notification");
+      if (noti != null) {
+        setNotification(JSON.parse(noti));
       }
     } catch (error) {
       console.log("value not recived");
     }
-  }
+  };
 
   return (
     <View style={{ backgroundColor: color.backgroundColor, height: hp(100) }}>
       {/* Profile  Picture */}
       <TouchableOpacity
-        style={{ marginTop: hp(1) }}
+        style={{ marginTop: hp(5) }}
         onPress={() => {
           navigation.navigate("Home");
         }}
@@ -83,7 +146,7 @@ useEffect(()=>{
           style={{ margin: hp(1), marginTop: hp(2) }}
         />
       </TouchableOpacity>
-      <View style={{justifyContent:'center',alignItems:'center'}}>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Text style={{ color: "#FFB534", padding: hp(2), fontSize: 50 }}>
           CookIT
         </Text>
@@ -137,8 +200,8 @@ useEffect(()=>{
           borderRadius: hp(2),
           justifyContent: "space-around",
           // marginTop: hp(5),
-          top:hp(10),
-          paddingBottom:hp(5),
+          top: hp(10),
+          paddingBottom: hp(5),
           // paddingTop:hp(5)
         }}
       >
@@ -147,30 +210,36 @@ useEffect(()=>{
           style={{ padding: hp(2), flexDirection: "row" }}
         >
           <MaterialIcons name="password" size={24} color="black" />
-          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Change Password</Text>
-         
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>
+            Change Password
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={()=>{handelNotification()}}
+          onPress={() => {
+            handelNotification();
+          }}
           style={{ padding: hp(2), flexDirection: "row" }}
         >
-          {
-            notification?<Ionicons name="notifications" size={24} color="black" /> :
+          {notification ? (
+            <Ionicons name="notifications" size={24} color="black" />
+          ) : (
             <Ionicons name="notifications-off" size={24} color="black" />
-          }
-                   
-          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Notification</Text>         
-          
+          )}
+
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>
+            Notification
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={()=>{navigation.navigate('Favorite')}}
+          onPress={handelFavorites}
           style={{ padding: hp(2), flexDirection: "row" }}
         >
           <MaterialIcons name="favorite" size={24} color="black" />
-          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Favorites</Text>
-          
+          <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>
+            Favorites
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -179,7 +248,6 @@ useEffect(()=>{
         >
           <MaterialIcons name="logout" size={24} color="black" />
           <Text style={{ marginLeft: hp(6), marginTop: hp(0.5) }}>Logout</Text>
-          
         </TouchableOpacity>
       </View>
     </View>

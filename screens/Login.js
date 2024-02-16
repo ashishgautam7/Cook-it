@@ -36,6 +36,8 @@ export default function Loginogin() {
       signInWithEmailAndPassword(authr, email, password)
         .then((userCredencial) => {
           naviagtion.navigate("Home");
+          setEmail("")
+          setPassword("")
           // console.log(userCredencial);
         })
         .catch((error) => {
@@ -58,6 +60,10 @@ export default function Loginogin() {
    naviagtion.navigate('ForgotPassword')
     // 
   }
+  function handelGuest() {
+    naviagtion.navigate('Home')
+     // 
+   }
   return (
     <ImageBackground style={{
       backgroundColor: "#FBF6EE",
@@ -66,7 +72,7 @@ export default function Loginogin() {
       resizeMode: 'cover',
       alignItems: "center",
     }}
-    // source={require('../assets/login.jpg')}
+    source={require('../assets/login.jpg')}
     >
       <View
       style={{
@@ -156,6 +162,9 @@ export default function Loginogin() {
         <View>
           <TouchableOpacity style={{justifyContent:'center', alignItems:'center',padding:hp(1)}} onPress={handelForgotPassword}>
             <Text style={{color:color.HedingColor}}>Forgot Password</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{justifyContent:'center', alignItems:'center',padding:hp(1)}} onPress={handelGuest}>
+            <Text style={{color:color.HedingColor}}>Guest</Text>
           </TouchableOpacity>
         </View>
       </View>

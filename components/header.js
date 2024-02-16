@@ -20,7 +20,7 @@ export default function ScreenHeader() {
       justifyContent: "space-between",
     }}
   > 
-    
+    {/* navigation,navigation("NotificationScreen") */}
     <Pressable onPress={()=>{
       navigation.navigate('Profile')}}>
     <Entypo name="user" size={24} color="gray" />
@@ -29,7 +29,9 @@ export default function ScreenHeader() {
     <Text style={{ fontSize: hp(2), color: "#FFB534" }}>
       Cook everything food at Home
     </Text>
-    <Pressable onPress={() => console.log("pressed bell")}>
+    <Pressable onPress={() => {
+      navigation.navigate("NotificationScreen")
+    }}>
     <FontAwesome6 name="bell-concierge" size={24} color="gray" />
     </Pressable>
     
