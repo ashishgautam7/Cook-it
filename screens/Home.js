@@ -23,12 +23,12 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [meals, setMeals] = useState([]);
   const [search, setSearch] = useState("")
-  const[searchMeal,setSearchMeal]=useState([])
+  
 
 useEffect (()=>{
 getCategories()
 getRecipiesByCategories()
-},[searchMeal])
+},[])
 
 // useEffect (()=>{
 //   setSearch("");
@@ -53,17 +53,11 @@ function handelSearchTextChange(text) {
   };
   const handelSearch = async () => {
     try {
-      const responce = await axios.get( `https://themealdb.com/api/json/v1/1/search.php?s=${search}`)
-      if(responce&&responce.data){
-        // console.log('Log 1: ',responce.data.meals);
-        setSearchMeal(responce.data.meals[0])
-        console.log("hehe: ",searchMeal);
-        navigation.navigate("NotificationScreen")
+      if (search!=""){
+        navigation.navigate("Search",{data:search});
         setSearch("")
-        
-      }else{
-        console.log("no data");
       }
+      
     } catch (error) {
       alert(error)
     }
@@ -114,7 +108,7 @@ const getRecipiesByCategories = async (category="Chicken")=>{
         }}
       >
         <TextInput
-          placeholder="Search for Recipe"
+          placeholder="Search by Recipe"
           style={{ flex: 1, padding: 10, paddingHorizontal: 10, height: hp(5)}}
           onChangeText={handelSearchTextChange}
           value={search}
