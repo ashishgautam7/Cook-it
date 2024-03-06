@@ -6,9 +6,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { authr } from "../components/firebase";
+import { authr, db } from "../components/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Auth } from "firebase/auth";
+import { setDoc,doc } from "firebase/firestore";
 
 export default function SighUp() {
   const [email, setEmail] = useState("");
@@ -47,8 +47,16 @@ export default function SighUp() {
       }else{
         if(emailRegex.test(email)){
           if (password == cnfrmPassword) {
-            createUserWithEmailAndPassword(authr, email, password).then(() => {
-              Alert.alert("Account Created Successfully");
+            createUserWithEmailAndPassword(authr, email, password).then(async(result) => {
+              try {
+                 const ref = doc(db, "Users", "result.user.uid").then(()=>{
+                  Alert.alert("Account Created Successfully",result.user.email," ID:", result.user.uid);
+                })
+               
+              } catch (error) {
+                console.log("Error while creating UID",error);
+              }
+              
             });
             
             setEmail("");
