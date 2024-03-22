@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CookIt",
-    "slug": "CookIt",
+    "name": "cookit",
+    "slug": "cookit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ashishgautam7.cookit",
+      "googleServicesFile":"google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cf4cc3de-6a1a-401a-a3fd-d5fc07c2992d"
+      }
+    },
+    "owner": "ashishgautam7"
   }
 }

@@ -54,7 +54,7 @@ export default function SighUp() {
                 })
                
               } catch (error) {
-                console.log("Error while creating UID",error);
+                // console.log("Error while creating UID",error);
               }
               
             });
